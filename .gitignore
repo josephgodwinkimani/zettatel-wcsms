@@ -1,0 +1,28 @@
+*.log
+/.htaccess
+
+# ignore node dependency directories (used by grunt)
+node_modules
+vendor
+wordpress
+package-lock.json
+composer.lock
+.phpunit.result.cache
+
+# ignore Editor files
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+*.code-workspace
+
+# track these files, if they exist
+!.gitignore
+!.editorconfig
+!phpcs.xml
+!phpunit.xml
+!Gruntfile.js
+!composer.json
+!package.json
+!readme.txt
+!.lando.yml
+!Dockerfile
