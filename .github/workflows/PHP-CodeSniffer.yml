@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: PHP CodeSniffer
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the trunk branch
+  push:
+    branches: [ trunk ]
+  pull_request:
+    branches: [ trunk ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Custom environment variables in your workflow file
+env:
+  WP_VERSION: latest # wordpress version
+  WC_VERSION: latest # woocommerce version
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "lint"
+  lint:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Caching dependencies to speed up workflows
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/composer/
+          key:  ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      # Setup PHP with required extensions, php.ini configuration, code-coverage support and various tools like composer in GitHub Actions
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions:  mbstring, intl
+          ini-values:  post_max_size=256M, max_execution_time=180
+          tools:       composer, php-cs-fixer
+          coverage:    xdebug
+      # composer install and run phpcs
+      - run: composer self-update 2.0.6 && composer install --no-progress && ./vendor/bin/phpcs --standard=phpcs.xml $(git ls-files | grep .php$)
