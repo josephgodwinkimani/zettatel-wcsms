@@ -2,16 +2,28 @@
 /.htaccess
 
 # ignore node dependency directories (used by grunt)
-node_modules
-vendor
+node_modules/
+vendor/
 wordpress
 package-lock.json
 composer.lock
+bin/composer/**/vendor/
+lib/vendor/
+contributors.md
+contributors.html
 .phpunit.result.cache
 
 # ignore Editor files
+nbproject/private/
+.idea
+.vscode/
+project.xml
+project.properties
+.project
+.settings*
 *.sublime-project
 *.sublime-workspace
+.sublimelinterrc
 *.komodoproject
 *.code-workspace
 
@@ -26,3 +38,12 @@ composer.lock
 !readme.txt
 !.lando.yml
 !Dockerfile
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+yarn-error.log
+npm-debug.log
+.pnpm-debug.log
