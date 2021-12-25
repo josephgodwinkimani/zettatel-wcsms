@@ -45,4 +45,4 @@ jobs:
           tools:       composer, php-cs-fixer
           coverage:    xdebug
       # composer install and run phpcs
-      - run: composer self-update 2.0.6 && composer install --no-progress && ./vendor/bin/phpcs --standard=phpcs.xml
+      - run: composer self-update 2.0.6 && composer install --no-progress && ./vendor/bin/phpcs --standard=phpcs.xml $(git ls-files | grep .php$)
