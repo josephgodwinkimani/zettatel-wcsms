@@ -12,19 +12,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
-     # Use php-actions/phpunit - xUnit architecture for unit testing frameworks
-      - uses: php-actions/composer@v5
-
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions:  mbstring, intl, xdebug
+          ini-values:  post_max_size=256M, max_execution_time=180
+          tools:       composer
+  
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
         env:
           TEST_NAME: Zettatel-WCSMS
-          XDEBUG_MODE: coverage
-        with:
-          # Specify extensions for coverage
-          php_extensions: xdebug
-          
+          XDEBUG_MODE: coverage          
           bootstrap: vendor/autoload.php
           
           # Specify configuration file
