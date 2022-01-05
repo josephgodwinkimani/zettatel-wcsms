@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zettatel Zettatel_WCSMS_Admin. Admin Class.
  *
@@ -9,49 +10,47 @@
 
 namespace Gkimani\Zettatel_WCSMS;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly.
-}
-
-
-if ( ! function_exists( '__construct()' ) ) {
-	require_once ABSPATH . 'wp-content/woocommerce/woocommerce.php';
 }
 
 /**
  * Zettatel_WCSMS_Admin class.
  */
-class Zettatel_WCSMS_Admin {
+class Zettatel_WCSMS_Admin
+{
 
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 
-		add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_tab' ), 100 );
-		add_action( 'woocommerce_settings_tabs_zettatel_sms', array( $this, 'zettatel_sms_settings_tab' ) );
-		add_action( 'woocommerce_update_options_zettatel_sms', array( $this, 'update_zettatel_sms_settings' ) );
-		add_action( 'woocommerce_admin_field_wc_zettatel_sms_link', array( $this, 'add_link_field' ) );
+		add_filter('woocommerce_settings_tabs_array', array($this, 'add_settings_tab'), 100);
+		add_action('woocommerce_settings_tabs_zettatel_sms', array($this, 'zettatel_sms_settings_tab'));
+		add_action('woocommerce_update_options_zettatel_sms', array($this, 'update_zettatel_sms_settings'));
+		add_action('woocommerce_admin_field_wc_zettatel_sms_link', array($this, 'add_link_field'));
 
-		add_action( 'wp_ajax_wc_zettatel_sms_send_test_sms', array( $this, 'send_test_sms' ) );
-		add_filter( 'plugin_action_links_' . ZETTATEL_BASE_URL, array( $this, 'plugin_action_links' ) );
+		add_action('wp_ajax_wc_zettatel_sms_send_test_sms', array($this, 'send_test_sms'));
+		add_filter('plugin_action_links_' . ZETTATEL_BASE_URL, array($this, 'plugin_action_links'));
 	}
 
 	/**
 	 * Add Zettatel-wcsms settings tab.
-     *
+	 *
 	 * @param array $settings_tabs.
 	 * @return array
 	 */
-	public function add_settings_tab( $settings_tabs ) {
+	public function add_settings_tab($settings_tabs)
+	{
 
 		$zettatel_settings_tab = array();
 
-		foreach ( $settings_tabs as $tab_id => $tab_title ) {
+		foreach ($settings_tabs as $tab_id => $tab_title) {
 
-			$zettatel_settings_tab[ $tab_id ] = $tab_title;
+			$zettatel_settings_tab[$tab_id] = $tab_title;
 
-			if ( 'email' === $tab_id ) {
+			if ('email' === $tab_id) {
 				$zettatel_settings_tab['zettatel_sms'] = 'Zettatel SMS';
 			}
 		}
@@ -64,7 +63,8 @@ class Zettatel_WCSMS_Admin {
 	 *
 	 * @return mixed|void
 	 */
-	public function zettatel_sms_settings() {
+	public function zettatel_sms_settings()
+	{
 
 		$settings = array(
 			array(
@@ -86,7 +86,7 @@ class Zettatel_WCSMS_Admin {
 				'id'    => 'wc_zettatel_sender_id',
 			),
 
-			array( 'type' => 'sectionend' ),
+			array('type' => 'sectionend'),
 
 			array(
 				'name' => 'Send Test SMS',
@@ -117,11 +117,11 @@ class Zettatel_WCSMS_Admin {
 				'type'   => 'wc_zettatel_sms_link',
 			),
 
-			array( 'type' => 'sectionend' ),
+			array('type' => 'sectionend'),
 
 		);
 
-		return apply_filters( 'zettatel_api_details_settings', $settings );
+		return apply_filters('zettatel_api_details_settings', $settings);
 	}
 
 	/**
@@ -129,18 +129,19 @@ class Zettatel_WCSMS_Admin {
 	 *
 	 * @param $field
 	 */
-	public function add_link_field( $field ) {
+	public function add_link_field($field)
+	{
 
-		if ( isset( $field['name'] ) && isset( $field['class'] ) && isset( $field['href'] ) ) :
+		if (isset($field['name']) && isset($field['class']) && isset($field['href'])) :
 
-			?>
+?>
 			<tr valign="top">
 				<th scope="row" class="titledesc"></th>
 				<td class="forminp">
-					<a href="<?php echo esc_url( $field['href'] ); ?>" class="<?php echo esc_attr( $field['class'] ); ?>"><?php echo wp_filter_kses( $field['name'] ); ?></a>
+					<a href="<?php echo esc_url($field['href']); ?>" class="<?php echo esc_attr($field['class']); ?>"><?php echo wp_filter_kses($field['name']); ?></a>
 				</td>
 			</tr>
-			<?php
+<?php
 
 		endif;
 	}
@@ -148,8 +149,9 @@ class Zettatel_WCSMS_Admin {
 	/**
 	 * Save zettatel settings.
 	 */
-	public function update_zettatel_sms_settings() {
-		woocommerce_update_options( $this->zettatel_sms_settings() );
+	public function update_zettatel_sms_settings()
+	{
+		woocommerce_update_options($this->zettatel_sms_settings());
 	}
 
 	/**
@@ -159,12 +161,12 @@ class Zettatel_WCSMS_Admin {
 	 *
 	 * @return array
 	 */
-	public function plugin_action_links( $links ) {
+	public function plugin_action_links($links)
+	{
 		$settings_link = array(
-			'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=zettatel_sms' ) . '" title="View zettatel Settings">Settings</a>',
+			'settings' => '<a href="' . admin_url('admin.php?page=wc-settings&tab=zettatel_sms') . '" title="View zettatel Settings">Settings</a>',
 		);
-		return array_merge( $links, $settings_link );
+		return array_merge($links, $settings_link);
 	}
-
 }
 new Zettatel_WCSMS_Admin();
