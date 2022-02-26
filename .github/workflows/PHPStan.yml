@@ -2,7 +2,7 @@ name: PHPStan
 
 on:
   push:
-    branches: [ trunk ]
+    branches: [ develop ]
   pull_request:
     branches: [ trunk ]
 
